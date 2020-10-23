@@ -1,3 +1,10 @@
 
 # Virtual environment
 .venv
+
+#byte-compiled
+__pycache__/
+.vscode/
+
+#Database
+db.sqlite3
