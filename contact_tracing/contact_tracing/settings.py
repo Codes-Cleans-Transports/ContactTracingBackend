@@ -29,7 +29,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
  #neo4j db config
-config.DATABASE_URL = 'bolt://neo4j:neo4j@localhost:7687'
+config.DATABASE_URL = 'bolt://neo4j:admin@localhost:7687'
 
 # Application definition
 
@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'user',
+    'contact',
+    
 ]
 
 MIDDLEWARE = [
