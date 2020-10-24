@@ -3,6 +3,7 @@ from .models import User
 from .models import ContactsRel
 from .selectors import *
 from neomodel import DoesNotExist
+from queue import SimpleQueue
 
 
 def process_get_or_create_user(
@@ -53,3 +54,8 @@ def calculate_safety(incoming_user: User, vertex: ContactsRel) -> float:
 
     result = occurenses_weight * user_risk
     return 1 - result
+
+
+def add_children(user: User, queue: SimpleQueue):
+    for user in user.contacts.all():
+            queue.put(user)
