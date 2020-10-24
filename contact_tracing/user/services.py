@@ -26,12 +26,11 @@ def create_user(
 
 
 def mark_positive(user: User):
-    user1 = get_user(mac = user.mac)
-
-    user1.status = "positive"
-    user1.safety = 0
+    user.status = "positive"
+    user.safety = 0
 
     user1.save()
+
 
 def calc_occ_weight(occ: int) -> float:
     res = -1
