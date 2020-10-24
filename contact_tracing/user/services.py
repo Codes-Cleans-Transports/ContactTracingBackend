@@ -12,16 +12,3 @@ def create_user(
     return user
 
 
-def create_contact(
-    *,
-    mac1: str,
-    mac2: str
-) -> ContactsRel:
-    user1 = User.nodes(mac=mac1)
-    user2 = User.nodes(mac=mac2)
-
-    contact = user1.contacts.connect(user2)
-
-    import pdb;pdb.set_trace()
-
-    return contact

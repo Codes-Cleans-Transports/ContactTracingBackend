@@ -18,8 +18,9 @@ from django.urls import path
 from django.conf.urls import include
 
 from user.urls import user_patterns
-
+from contact.urls import contact_patterns
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('users/', include((user_patterns, 'user'), namespace='user'))
+    path('users/', include((user_patterns, 'user'), namespace='user')),
+    path('contacts/', include((contact_patterns, 'contact'), namespace='contact')),
 ]
