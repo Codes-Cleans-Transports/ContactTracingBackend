@@ -1,7 +1,5 @@
 from django.db import models
-from neomodel import StructuredNode, StructuredRel, Relationship
-from neomodel import UniqueIdProperty, DateTimeProperty, IntegerProperty, StringProperty
-from neomodel import cardinality
+from neomodel import *
 
 # Create your models here.
 class ContactsRel(StructuredRel):
@@ -10,7 +8,7 @@ class ContactsRel(StructuredRel):
 
 class User(StructuredNode):
     mac = StringProperty(unique_index=True, required=True)
-    status = StringProperty(required=True)
+    status = StringProperty(choices={"negative": "negative", "positive": "positive"}, default="negative")
     
     contacts = Relationship('User', 'CONTACTS', model=ContactsRel)
 
