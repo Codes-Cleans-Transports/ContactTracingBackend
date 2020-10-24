@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import serializers, views, status
 from rest_framework.response import Response
 from rest_framework.serializers import IntegerField, DateTimeField, DictField, ListField
-from .services import process_create_or_update_contact
+from .services import process_create_or_update_contacts
 from user.models import User, ContactsRel
 from user.selectors import get_user, get_users_risk
 
