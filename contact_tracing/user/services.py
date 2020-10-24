@@ -3,8 +3,7 @@ from .models import User
 from .models import ContactsRel
 from .selectors import *
 from neomodel import DoesNotExist
-from queue import SimpleQueue
-
+from queue import Queue
 
 def process_get_or_create_user(
     *,
@@ -48,13 +47,35 @@ def calc_occ_weight(occ: int) -> float:
 
 def calculate_safety(incoming_user: User, vertex: ContactsRel) -> float:
     occurenses_weight = calc_occ_weight(vertex.duration)
-
+    
     user_risk = 1 - incoming_user.safety
 
     result = occurenses_weight * user_risk
     return 1 - result
 
 
-def add_children(user: User, queue: SimpleQueue):
-    for user in user.contacts.all():
-            queue.put(user)
+def add_children(master_user: User, queue: Queue):
+    for user in master_user.contacts.all():
+            queue.put((user, master_user))
+
+def propagate_safety(master_user: User):
+    queue = Queue()
+
+	# Push all children onto the queue
+
+    add_children(master_user, queue)
+    import pdb;
+
+    while not queue.empty():
+        # Remove the fist element of the queue
+        user, master_user = queue.get()
+        vertex = user.contacts.all_relationships(master_user)[0]
+
+        
+        # Calculate the safety of child nodes
+        newSafety = calculate_safety(master_user, vertex)
+
+        if newSafety < user.safety :
+            user.safety = newSafety
+            user.save()
+            add_children(user, queue)
