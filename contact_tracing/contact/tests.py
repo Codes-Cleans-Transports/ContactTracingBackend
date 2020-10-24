@@ -26,13 +26,20 @@ class ContactsTests(TestCase):
         user1.contacts.connect(user2, {'start': date, 'duration': 1})
 
     def test_mark_positive(self):
+        date = datetime.today()
+
         user1 = User(mac = "mac1", status = "negative").save()
+        user2 = User(mac = "mac2", status = "negative").save()
+
+        user1.contacts.connect(user2, {'start': date, 'duration': 90})
 
         mark_positive(user1)
 
         user1 = get_user(mac = user1.mac)
+        user2 = get_user(mac = user2.mac)
         self.assert_(user1.status == "positive")
         self.assertAlmostEqual(user1.safety, 0)
+        self.assertAlmostEqual(user2.safety, 0.2)
 
     def test_calc_occ_weight(self):
         self.assertEqual(calc_occ_weight(0), 0)
@@ -106,6 +113,7 @@ class ContactsTests(TestCase):
 
         user2 = get_user(mac = user2.mac)
         user3 = get_user(mac = user3.mac)
+
         self.assertEqual(user3.safety, 0.95)
         self.assertAlmostEqual(user2.safety, 0.2)
         

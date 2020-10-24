@@ -27,9 +27,9 @@ def create_user(
 def mark_positive(user: User):
     user.status = "positive"
     user.safety = 0
-
     user.save()
-
+    propagate_safety(user)
+    
 
 def calc_occ_weight(occ: int) -> float:
     res = -1
@@ -79,3 +79,5 @@ def propagate_safety(master_user: User):
             user.safety = newSafety
             user.save()
             add_children(user, queue)
+
+
