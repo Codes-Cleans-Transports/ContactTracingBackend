@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.serializers import IntegerField, DateTimeField, DictField, ListField
 from .services import process_create_or_update_contact
 from user.models import User, ContactsRel
-from user.selectors import get_user
+from user.selectors import get_user, get_users_risk
 
 
 # Create your views here.
@@ -44,17 +44,16 @@ class ContactCreateDetailView(views.APIView):
 
 class ContactDetailView(views.APIView):
 
-   
+    class OutputSerializer(serializers.Serializer):
+        risks = ListField()
 
     def get(self, request, mac):
-        user = get_user(mac=mac)
-        start = []
-        duration = []
+        risks = get_users_risk(mac=mac, range=2)
 
         for contact in user.contacts.all():
             start.append(user.contacts.relationship(contact).start)
             duration.append(user.contacts.relationship(contact).duration)
 
-        serializer = self.OutputSerializer({'contacts': user.contacts.all(), 'start': start, 'duration': duration})
+        serializer = self.OutputSerializer({'risks': risks})
 
         return Response(data=serializer.data)
