@@ -18,10 +18,6 @@ def create_user(
     *,
     mac: str
 ) -> User:
-    user = User(mac=mac, status='gei').save()
+    user = User(mac=mac).save()
     
     return user
-
-
-
-
