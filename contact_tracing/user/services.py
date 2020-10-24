@@ -5,14 +5,6 @@ from .selectors import *
 from neomodel import DoesNotExist
 from queue import Queue
 
-class CustomTuple:
-    def __init__(self, first, second):
-        self.first = first
-        self.second = second
-
-    def __eq__(self, obj):
-        return isinstance(obj, CustomTuple) and obj.first == self.first and obj.second == self.second
-
 def process_get_or_create_user(
     *,
     mac: str
@@ -55,7 +47,7 @@ def calc_occ_weight(occ: int) -> float:
 
 def calculate_safety(incoming_user: User, vertex: ContactsRel) -> float:
     occurenses_weight = calc_occ_weight(vertex.duration)
-
+    
     user_risk = 1 - incoming_user.safety
 
     result = occurenses_weight * user_risk
@@ -64,7 +56,7 @@ def calculate_safety(incoming_user: User, vertex: ContactsRel) -> float:
 
 def add_children(master_user: User, queue: Queue):
     for user in master_user.contacts.all():
-            queue.put(CustomTuple(user, master_user))
+            queue.put((user, master_user))
 
 def propagate_safety(master_user: User):
     queue = Queue()
@@ -72,18 +64,17 @@ def propagate_safety(master_user: User):
 	# Push all children onto the queue
 
     add_children(master_user, queue)
-    import pdb;pdb.set_trace()
-    
+    import pdb;
+
     while not queue.empty():
         # Remove the fist element of the queue
-        custon_tuple = queue.get()
-        user = custon_tuple.first
-        master_user = custon_tuple.second
+        user, master_user = queue.get()
         vertex = user.contacts.all_relationships(master_user)[0]
 
+        
         # Calculate the safety of child nodes
-        newSafety = calculate_safety(user, vertex)
-		
+        newSafety = calculate_safety(master_user, vertex)
+
         if newSafety < user.safety :
             user.safety = newSafety
             user.save()

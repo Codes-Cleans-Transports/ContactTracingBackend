@@ -81,7 +81,7 @@ class ContactsTests(TestCase):
         user1.contacts.connect(user2, {'start': date, 'duration': 1})
         user1.contacts.connect(user3, {'start': date, 'duration': 1})
 
-        queue = Q()
+        queue = Queue()
 
         add_children(user1, queue)
 
@@ -89,8 +89,8 @@ class ContactsTests(TestCase):
         while not queue.empty():
             result.append(queue.get())
 
-        self.assertTrue(CustomTuple(user2, user1) in result)
-        self.assertTrue(CustomTuple(user3, user1) in result)
+        self.assertTrue((user2, user1) in result)
+        self.assertTrue((user3, user1) in result)
 
     def test_propagate_safety(self):
         date = datetime.today()
@@ -106,9 +106,8 @@ class ContactsTests(TestCase):
 
         user2 = get_user(mac = user2.mac)
         user3 = get_user(mac = user3.mac)
-        
-        self.assertEqual(user3.safety, 0.05)
-        self.assertEqual(user2.safety, 0.8)
+        self.assertEqual(user3.safety, 0.95)
+        self.assertAlmostEqual(user2.safety, 0.2)
         
 
 
