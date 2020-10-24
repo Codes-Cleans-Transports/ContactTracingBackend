@@ -26,10 +26,10 @@ SECRET_KEY = '9zx=z6eg8zl@9v6vg^jay*6e(46$#@-xr3m=tt7j0502qd@*=h'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
  #neo4j db config
-config.DATABASE_URL = 'bolt://admin:admin@localhost:7687'
+config.DATABASE_URL = 'bolt://neo4j:admin@localhost:7687'
 
 # Application definition
 
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'user',
     'contact',
     
@@ -53,7 +54,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'contact_tracing.urls'
 
