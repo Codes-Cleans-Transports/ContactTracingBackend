@@ -8,7 +8,6 @@ class ContactsRel(StructuredRel):
     duration = IntegerProperty(required=True)
 
 class User(StructuredNode):
-    id = UniqueIdProperty()
     mac = StringProperty(unique_index=True, required=True)
     status = StringProperty(required=True)
 
