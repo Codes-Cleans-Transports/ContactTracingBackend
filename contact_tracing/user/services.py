@@ -58,13 +58,13 @@ def add_children(master_user: User, queue: Queue):
     for user in master_user.contacts.all():
             queue.put((user, master_user))
 
+
 def propagate_safety(master_user: User):
     queue = Queue()
 
 	# Push all children onto the queue
 
     add_children(master_user, queue)
-    import pdb;
 
     while not queue.empty():
         # Remove the fist element of the queue
