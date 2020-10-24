@@ -71,6 +71,26 @@ class ContactsTests(TestCase):
 
         self.assertEqual(calculate_safety(user, vertex), 0.6)
 
+    def test_add_children(self):
+        date = datetime.today()
+
+        user1 = User(mac = "mac1", status = "negative").save()
+        user2 = User(mac = "mac2", status = "negative").save()
+        user3 = User(mac = "mac3", status = "negative").save()
+
+        user1.contacts.connect(user2, {'start': date, 'duration': 1})
+        user1.contacts.connect(user3, {'start': date, 'duration': 1})
+
+        queue = SimpleQueue()
+
+        add_children(user1, queue)
+
+        result = []
+        while not queue.empty():
+            result.append(queue.get())
+
+        self.assertTrue(user2 in result)
+        self.assertTrue(user3 in result)
 
 
 

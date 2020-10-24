@@ -11,16 +11,15 @@ from user.selectors import get_user
 class ContactCreateView(views.APIView):
 
     class InputSerializer(serializers.Serializer):
-        mac1 = serializers.CharField(required=True)
-        mac2 = serializers.CharField(required=True)
+        mac = serializers.CharField(required=True)
 
     class OutputSerializer(serializers.Serializer):
         pass
 
-    def post(self, request):
+    def post(self, request, mac):
         serializer = self.InputSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
 
+        serializer.is_valid(raise_exception=True)
 
         contact = create_or_update_contact(**serializer.validated_data)
 
