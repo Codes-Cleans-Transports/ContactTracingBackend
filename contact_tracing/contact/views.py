@@ -34,7 +34,6 @@ class ContactsDetailView(views.APIView):
 
     def get(self, request, mac):
         user = get_user(mac=mac)
-        import pdb;pdb.set_trace()
 
         serializer = self.OutputSerializer({'contacts':user.nodes.all()})
 
