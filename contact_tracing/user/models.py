@@ -12,11 +12,7 @@ class User(StructuredNode):
     mac = StringProperty(unique_index=True, required=True)
     safety = FloatProperty(default=1)
     status = StringProperty(required=True)
+    
+    contacts = Relationship('User', 'CONTACTS', model=ContactsRel)
 
-    contacts = Relationship(
-        'User', 
-        'CONTACTS',
-        model=ContactsRel,
-        cardinality=cardinality.ZeroOrMore,
-    )
 
