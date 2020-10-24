@@ -28,7 +28,7 @@ def mark_positive(user: User):
     user.status = "positive"
     user.safety = 0
 
-    user1.save()
+    user.save()
 
 
 def calc_occ_weight(occ: int) -> float:
