@@ -25,9 +25,9 @@ def create_user(
 
 
 def mark_positive(user: User):
-    user1 = get_user(mac = user.mac)
+    user.status = "Positive"
+    user.safety = 0
 
-    user1.status = "Positive"
-    user1.safety = 0
+    user.save()
 
-    user1.save()
+    return user
