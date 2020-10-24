@@ -32,7 +32,6 @@ class UserCreateView(views.APIView):
 
 class UserDetailsView(views.APIView):
 
-
     class OutputSerializer(serializers.Serializer):
         status = serializers.CharField()
     
@@ -43,6 +42,8 @@ class UserDetailsView(views.APIView):
         output_serializer = self.OutputSerializer({'status': user.status})
 
         return Response(data=output_serializer.data)
+
+
 
 
 

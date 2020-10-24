@@ -9,7 +9,7 @@ def create_or_update_contact(
     user1 = User.nodes.get(mac=mac1)
     user2 = User.nodes.get(mac=mac2)
     start = datetime.today()
-    #duration = 
+    #duration =
     contact = user1.contacts.connect(user2,{'start':start, 'duration':1})
 
     return contact
