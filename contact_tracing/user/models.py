@@ -4,7 +4,6 @@ from neomodel import *
 
 # Create your models here.
 class ContactsRel(StructuredRel):
-    start =  DateTimeProperty(required=True)
     duration = IntegerProperty(required=True)
 
 class User(StructuredNode):
