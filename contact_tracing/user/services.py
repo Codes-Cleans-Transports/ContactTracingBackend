@@ -3,8 +3,15 @@ from .models import User
 from .models import ContactsRel
 from .selectors import *
 from neomodel import DoesNotExist
-from queue import SimpleQueue
+from queue import Queue
 
+class CustomTuple:
+    def __init__(self, first, second):
+        self.first = first
+        self.second = second
+
+    def __eq__(self, obj):
+        return isinstance(obj, CustomTuple) and obj.first == self.first and obj.second == self.second
 
 def process_get_or_create_user(
     *,
@@ -55,6 +62,29 @@ def calculate_safety(incoming_user: User, vertex: ContactsRel) -> float:
     return 1 - result
 
 
-def add_children(user: User, queue: SimpleQueue):
-    for user in user.contacts.all():
-            queue.put(user)
+def add_children(master_user: User, queue: Queue):
+    for user in master_user.contacts.all():
+            queue.put(CustomTuple(user, master_user))
+
+def propagate_safety(master_user: User):
+    queue = Queue()
+
+	# Push all children onto the queue
+
+    add_children(master_user, queue)
+    import pdb;pdb.set_trace()
+    
+    while not queue.empty():
+        # Remove the fist element of the queue
+        custon_tuple = queue.get()
+        user = custon_tuple.first
+        master_user = custon_tuple.second
+        vertex = user.contacts.all_relationships(master_user)[0]
+
+        # Calculate the safety of child nodes
+        newSafety = calculate_safety(user, vertex)
+		
+        if newSafety < user.safety :
+            user.safety = newSafety
+            user.save()
+            add_children(user, queue)
