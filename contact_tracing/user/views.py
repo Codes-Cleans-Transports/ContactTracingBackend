@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from .services import process_get_or_create_user
-from .selectors import get_user
+from .selectors import get_user, get_users_risk
 
 # Create your views here.
 
@@ -17,6 +17,7 @@ class UserDetailsView(views.APIView):
     def get(self, request, mac):
         
         user = process_get_or_create_user(mac=mac)
+        users_risk = get_users_risk(mac=mac, range=2)
 
         output_serializer = self.OutputSerializer({'status': user.status})
 
