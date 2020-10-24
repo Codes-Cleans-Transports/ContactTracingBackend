@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import UserDetailsView
+from .views import UserDetailsPatchView
 
 
 user_patterns = [
-    path('<mac>', UserDetailsView.as_view(), name='user_details')
+    path('<mac>', UserDetailsPatchView.as_view(), name='user_details_patch')
 ]
