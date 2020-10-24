@@ -1,15 +1,15 @@
 from django.db import models
-from neomodel import StructuredNode, StructuredRel, RelationshipTo
-from neomodel import UniqueIdProperty, DateProperty, IntegerProperty, StringProperty
+from neomodel import StructuredNode, StructuredRel, Relationship
+from neomodel import UniqueIdProperty, DateTimeProperty, IntegerProperty, StringProperty
 
 # Create your models here.
 class ContactsRel(StructuredRel):
-    start =  DateProperty(required=True)
+    start =  DateTimeProperty(required=True)
     duration = IntegerProperty(required=True)
 
 class User(StructuredNode):
     mac = StringProperty(unique_index=True, required=True)
     status = StringProperty(required=True)
 
-    contacts = RelationshipTo('User', 'CONTACTS', model=ContactsRel) # cardinality is zero or more
+    contacts = Relationship('User', 'CONTACTS', model=ContactsRel)
 
