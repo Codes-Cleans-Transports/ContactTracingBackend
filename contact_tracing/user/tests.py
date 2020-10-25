@@ -10,6 +10,8 @@ from user.services import *
 
 from random import randrange
 
+from contact.utils import gen_today_occurances
+
 # Create your tests here.
 
 class UserTests(TestCase):
@@ -21,13 +23,13 @@ class UserTests(TestCase):
         user1 = User(mac = "mac1", status = "negative").save()
         user2 = User(mac = "mac2", status = "negative").save()
 
-        user1.contacts.connect(user2, {'duration': 1})
+        user1.contacts.connect(user2, {'durations': gen_today_occurances(1)})
 
     def test_mark_positive(self):
         user1 = User(mac = "mac1", status = "negative").save()
         user2 = User(mac = "mac2", status = "negative").save()
 
-        user1.contacts.connect(user2, {'duration': 90})
+        user1.contacts.connect(user2, {'durations': gen_today_occurances(90)})
 
         mark_positive(user1)
 
@@ -55,21 +57,21 @@ class UserTests(TestCase):
     def test_calculate_safety(self):
         occ = 10
         safety = 1
-        vertex = ContactsRel(start=datetime.today(), duration = occ)
+        vertex = ContactsRel(durations = gen_today_occurances(occ))
         user = User(mac="mac1", status = "negative", safety = safety)
 
         self.assertEqual(calculate_safety(user, vertex), 1.0)
 
         occ = 10
         safety = 0
-        vertex = ContactsRel(start=datetime.today(), duration = occ)
+        vertex = ContactsRel(durations = gen_today_occurances(occ))
         user = User(mac="mac1", status = "negative", safety = safety)
 
         self.assertEqual(calculate_safety(user, vertex), 0.95)
 
         occ = 90
         safety = .5
-        vertex = ContactsRel(start=datetime.today(), duration = occ)
+        vertex = ContactsRel(durations = gen_today_occurances(occ))
         user = User(mac="mac1", status = "negative", safety = safety)
 
         self.assertEqual(calculate_safety(user, vertex), 0.6)
@@ -79,8 +81,8 @@ class UserTests(TestCase):
         user2 = User(mac = "mac2", status = "negative").save()
         user3 = User(mac = "mac3", status = "negative").save()
 
-        user1.contacts.connect(user2, {'duration': 1})
-        user1.contacts.connect(user3, {'duration': 1})
+        user1.contacts.connect(user2, {'durations': gen_today_occurances(1)})
+        user1.contacts.connect(user3, {'durations': gen_today_occurances(1)})
 
         queue = Queue()
 
@@ -98,8 +100,8 @@ class UserTests(TestCase):
         user2 = User(mac = "mac2", status = "negative", safety = 1).save()
         user3 = User(mac = "mac3", status = "negative", safety = 1).save()
 
-        user1.contacts.connect(user2, {'duration': 90})
-        user1.contacts.connect(user3, {'duration': 10})
+        user1.contacts.connect(user2, {'durations': gen_today_occurances(90)})
+        user1.contacts.connect(user3, {'durations': gen_today_occurances(10)})
 
         propagate_safety(user1)
 
@@ -117,9 +119,9 @@ class UserTests(TestCase):
         user2 = User(mac = "mac2", status = "negative", safety = 1).save()
         user3 = User(mac = "mac3", status = "negative", safety = 1).save()
 
-        user1.contacts.connect(user2, {'duration': 90})
-        user1.contacts.connect(user3, {'duration': 10})
-        user2.contacts.connect(user3, {'duration': 50})
+        user1.contacts.connect(user2, {'durations': gen_today_occurances(90)})
+        user1.contacts.connect(user3, {'durations': gen_today_occurances(10)})
+        user2.contacts.connect(user3, {'durations': gen_today_occurances(50)})
 
         propagate_safety(user1)
 
