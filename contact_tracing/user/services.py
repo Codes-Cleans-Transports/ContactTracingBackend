@@ -4,6 +4,7 @@ from .models import ContactsRel
 from .selectors import *
 from neomodel import DoesNotExist
 from queue import Queue
+import json
 
 def process_get_or_create_user(
     *,
@@ -46,7 +47,12 @@ def calc_occ_weight(occ: int) -> float:
 
 
 def calculate_safety(incoming_user: User, vertex: ContactsRel) -> float:
-    occurenses_weight = calc_occ_weight(vertex.duration)
+    occ_sum = 0
+
+    for day, occurances in json.loads(vertex.durations).items():
+        occ_sum += occurances
+
+    occurenses_weight = calc_occ_weight(occ_sum)
     
     user_risk = 1 - incoming_user.safety
 
