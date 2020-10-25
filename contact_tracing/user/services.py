@@ -70,8 +70,8 @@ def propagate_safety(master_user: User):
         user, master_user = queue.get()
         user = get_user(mac = user.mac)
         master_user = get_user(mac = master_user.mac)
-        vertex = user.contacts.all_relationships(master_user)[0]
 
+        vertex = user.contacts.all_relationships(master_user)[0]
         
         # Calculate the safety of child nodes
         newSafety = calculate_safety(master_user, vertex)

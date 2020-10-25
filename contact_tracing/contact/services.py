@@ -15,13 +15,14 @@ def process_create_or_update_contacts(
         target = process_get_or_create_user(mac=mac)
         create_or_update_contact(user1=user, user2=target)
 
+
 def create_or_update_contact(
     *,
     user1: User,
     user2: User
 ) -> ContactsRel:
 
-    if user1.contacts.is_created(user2):
+    if user1.contacts.is_connected(user2):
         relationship = user1.contacts.relationship(user2)
         relationship.duration += 1
         relationship.save()
