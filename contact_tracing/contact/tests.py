@@ -99,7 +99,7 @@ class ContactsTests(TestCase):
         self.assertTrue((user2, user1) in result)
         self.assertTrue((user3, user1) in result)
 
-    def test_propagate_safety(self):
+    def test_propagate_safety_simple(self):
         date = datetime.today()
 
         user1 = User(mac = "mac1", status = "negative", safety = 0).save()
@@ -111,17 +111,34 @@ class ContactsTests(TestCase):
 
         propagate_safety(user1)
 
+        user1 = get_user(mac = user1.mac)
         user2 = get_user(mac = user2.mac)
         user3 = get_user(mac = user3.mac)
 
-        self.assertEqual(user3.safety, 0.95)
+        self.assertEqual(user1.safety, 0)
         self.assertAlmostEqual(user2.safety, 0.2)
+        self.assertEqual(user3.safety, 0.95)
         
 
+    def test_propagate_safety_loop(self):
+        date = datetime.today()
 
-    
+        user1 = User(mac = "mac1", status = "negative", safety = 0).save()
+        user2 = User(mac = "mac2", status = "negative", safety = 1).save()
+        user3 = User(mac = "mac3", status = "negative", safety = 1).save()
 
+        user1.contacts.connect(user2, {'start': date, 'duration': 90})
+        user1.contacts.connect(user3, {'start': date, 'duration': 10})
+        user2.contacts.connect(user3, {'start': date, 'duration': 50})
 
+        propagate_safety(user1)
 
+        user1 = get_user(mac = user1.mac)
+        user2 = get_user(mac = user2.mac)
+        user3 = get_user(mac = user3.mac)
 
+        self.assertEqual(user1.safety, 0)
+        self.assertAlmostEqual(user2.safety, 0.2)
+        self.assertTrue(0.05 < user3.safety and user3.safety < 0.95)
 
+        
