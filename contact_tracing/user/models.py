@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime
 from neomodel import *
 import json
 
@@ -7,8 +8,11 @@ import json
 class ContactsRel(StructuredRel):
     durations = JSONProperty()
 
-    def get_date_occurances(self, date):
+    def get_date_occurances(self, date=None):
         durations_dict = json.loads(self.durations)
+
+        if date is None:
+            date = datetime.today().date()
 
         if str(date) in durations_dict:
             return durations_dict[str(date)]
