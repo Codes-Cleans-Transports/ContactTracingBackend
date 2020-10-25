@@ -14,7 +14,12 @@ def get_users_risk(
     range: int
 ) -> User:
 
-    #import pdb;pdb.set_trace()
     query = f"MATCH (n:User) WHERE n.mac='{mac}' MATCH (n)-[r:CONTACTS*0..{range}]-(m) RETURN m.mac, m.risk;"
     return db.cypher_query(query)
 
+
+def get_user_conections(
+    *,
+    mac:str,
+    range: int
+)
