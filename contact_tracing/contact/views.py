@@ -39,7 +39,7 @@ class ContactCreateDetailView(views.APIView):
         root.append(mac)
 
         user_risk = get_users_risk(mac=mac, range=4)
-        user_conns = get_user_conections(mac=mac, range=4)[0]
+        user_conns = get_user_conections()[0]
 
         for contact in user.contacts.all():
             duration.append(user.contacts.relationship(contact).durations)
