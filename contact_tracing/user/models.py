@@ -6,6 +6,11 @@ from neomodel import *
 class ContactsRel(StructuredRel):
     durations = JSONProperty()
 
+    def get_date_occurances(self, date):
+        durations_dict = json.loads(self.durations)
+
+        return durations_dict(str(date))
+
 class User(StructuredNode):
     mac = StringProperty(unique_index=True, required=True)
     status = StringProperty(choices={"negative": "negative", "positive": "positive"}, default="negative")
