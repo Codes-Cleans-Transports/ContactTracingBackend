@@ -5,6 +5,7 @@ from rest_framework.serializers import IntegerField, DateTimeField, DictField, L
 from .services import process_create_or_update_contacts
 from user.models import User, ContactsRel
 from user.selectors import get_user, get_users_risk, get_user_conections
+from user.services import process_get_or_create_user
 
 
 # Create your views here.
@@ -19,11 +20,12 @@ class ContactCreateDetailView(views.APIView):
         macs = serializers.ListField(child=serializers.CharField())
 
     def post(self, request, mac):
+
         serializer = self.InputSerializer(data=request.data)
 
         serializer.is_valid(raise_exception=True)
 
-        user = get_user(mac=mac)
+        user = process_get_or_create_user(mac=mac)
 
         contact = process_create_or_update_contacts(user=user, **serializer.validated_data)
 
