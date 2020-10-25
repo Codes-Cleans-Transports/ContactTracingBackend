@@ -22,4 +22,6 @@ def get_user_conections(
     *,
     mac:str,
     range: int
-)
+):
+    query =f"MATCH (n:User) WHERE n.mac='{mac}' MATCH (n)-[r:CONTACTS*0..{range}]-(m) RETURN m.mac, n.mac;"
+    return db.cypher_query(query)
