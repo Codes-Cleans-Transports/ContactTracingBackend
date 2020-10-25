@@ -47,12 +47,8 @@ def calc_occ_weight(occ: int) -> float:
 
 
 def calculate_safety(incoming_user: User, vertex: ContactsRel) -> float:
-    occ_sum = 0
-
-    for day, occurances in json.loads(vertex.durations).items():
-        occ_sum += occurances
-
-    occurenses_weight = calc_occ_weight(occ_sum)
+    
+    occurenses_weight = calc_occ_weight(vertex.duration())
     
     user_risk = 1 - incoming_user.safety
 
