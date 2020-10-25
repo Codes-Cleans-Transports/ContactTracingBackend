@@ -4,6 +4,7 @@ from user.services import process_get_or_create_user
 
 from user.services import propagate_safety
 
+import json
 
 
 def process_create_or_update_contacts(
@@ -21,12 +22,15 @@ def create_or_update_contact(
     user2: User
 ) -> ContactsRel:
 
-    if user1.contacts.is_created(user2):
+    if user1.contacts.is_connected(user2):
         relationship = user1.contacts.relationship(user2)
-        relationship.duration += 1
+        durations = relationship.durations
         relationship.save()
     else:
-        relationship = user1.contacts.connect(user2, {'duration': 1})
+        today = datetime.today().date()
+        durations = {}
+        durations[str(today)] = 1
+        relationship = user1.contacts.connect(user2, {'durations': json.dumps(durations)})
 
     if user1.safety > user2.safety:
         propagate_safety(user2)
