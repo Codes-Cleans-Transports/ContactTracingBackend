@@ -26,7 +26,9 @@ SECRET_KEY = '9zx=z6eg8zl@9v6vg^jay*6e(46$#@-xr3m=tt7j0502qd@*=h'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS=['*']
+CORS_ORIGIN_ALLOW_ALL = True
+
 
  #neo4j db config
 config.DATABASE_URL = 'bolt://neo4j:admin@localhost:7687'

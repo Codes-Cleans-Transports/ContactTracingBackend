@@ -11,8 +11,7 @@ from user.selectors import get_user, get_users_risk
 class ContactCreateDetailView(views.APIView):
 
     class OutputSerializer(serializers.Serializer):
-        contacts = DictField()
-        start = ListField()
+        risks = ListField()
         duration = ListField()
 
     class InputSerializer(serializers.Serializer):
@@ -31,29 +30,13 @@ class ContactCreateDetailView(views.APIView):
 
     def get(self, request, mac):
         user = get_user(mac=mac)
-        start = []
         duration = []
 
-        for contact in user.contacts.all():
-            start.append(user.contacts.relationship(contact).start)
-            duration.append(user.contacts.relationship(contact).duration)
-
-        serializer = self.OutputSerializer({'contacts': user.contacts.all(), 'start': start, 'duration': duration})
-
-        return Response(data=serializer.data)
-
-class ContactDetailView(views.APIView):
-
-    class OutputSerializer(serializers.Serializer):
-        risks = ListField()
-
-    def get(self, request, mac):
-        risks = get_users_risk(mac=mac, range=2)
+        user_risk = get_users_risk(mac=mac, range=2)
 
         for contact in user.contacts.all():
-            start.append(user.contacts.relationship(contact).start)
-            duration.append(user.contacts.relationship(contact).duration)
+            duration.append(user.contacts.relationship(contact).durations)
 
-        serializer = self.OutputSerializer({'risks': risks})
+        serializer = self.OutputSerializer({'risks': user_risk, 'duration': duration})
 
         return Response(data=serializer.data)

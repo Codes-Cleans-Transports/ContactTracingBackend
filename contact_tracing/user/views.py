@@ -21,7 +21,7 @@ class UserDetailsPatchView(views.APIView):
     def get(self, request, mac):
         
         user = process_get_or_create_user(mac=mac)
-        users_risk = get_users_risk(mac=mac, range=2)
+        users_risk = get_users_risk(mac=mac, range=4)
 
         output_serializer = self.OutputSerializer({'status': user.status, 'safety': user.safety})
 
