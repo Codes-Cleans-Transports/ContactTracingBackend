@@ -10,7 +10,10 @@ class ContactsRel(StructuredRel):
     def get_date_occurances(self, date):
         durations_dict = json.loads(self.durations)
 
-        return durations_dict(str(date))
+        if str(date) in durations_dict:
+            return durations_dict[str(date)]
+        else:
+            return 0
 
     def duration(self) -> int:
         occ_sum = 0
