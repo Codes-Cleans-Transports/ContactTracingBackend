@@ -15,6 +15,7 @@ class UserDetailsPatchView(views.APIView):
 
     class OutputSerializer(serializers.Serializer):
         status = serializers.CharField()
+        safety = serializers.CharField()
 
     
     def get(self, request, mac):
@@ -22,7 +23,7 @@ class UserDetailsPatchView(views.APIView):
         user = process_get_or_create_user(mac=mac)
         users_risk = get_users_risk(mac=mac, range=2)
 
-        output_serializer = self.OutputSerializer({'status': user.status})
+        output_serializer = self.OutputSerializer({'status': user.status, 'safety': user.safety})
 
         return Response(data=output_serializer.data)
 
