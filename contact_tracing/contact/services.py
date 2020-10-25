@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from user.models import User, ContactsRel
 from user.services import process_get_or_create_user
 
@@ -25,8 +25,18 @@ def create_or_update_contact(
 
     if user1.contacts.is_connected(user2):
         relationship = user1.contacts.relationship(user2)
-        durations = relationship.durations
+
+        durations = json.loads(relationship.durations)
+        today = datetime.today().date()
+
+        if str(today) in durations:
+            durations[str(today)] += 1
+        else:
+            durations[str(today)] = 1
+
+        relationship.durations = json.dumps(durations)
         relationship.save()
+
     else:
         today = datetime.today().date()
         durations = {}
