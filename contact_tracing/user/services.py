@@ -30,7 +30,7 @@ def mark_positive(user: User):
     user.safety = 0
     user.save()
     propagate_safety(user)
-    
+
 
 def calc_occ_weight(occ: int) -> float:
     res = -1
@@ -69,14 +69,15 @@ def propagate_safety(master_user: User):
     queue = Queue()
 
 	# Push all children onto the queue
-
     add_children(master_user, queue)
 
     while not queue.empty():
         # Remove the fist element of the queue
         user, master_user = queue.get()
-        vertex = user.contacts.all_relationships(master_user)[0]
+        user = get_user(mac = user.mac)
+        master_user = get_user(mac = master_user.mac)
 
+        vertex = user.contacts.all_relationships(master_user)[0]
         
         # Calculate the safety of child nodes
         newSafety = calculate_safety(master_user, vertex)
