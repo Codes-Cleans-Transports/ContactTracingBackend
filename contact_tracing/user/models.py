@@ -4,7 +4,7 @@ from neomodel import *
 
 # Create your models here.
 class ContactsRel(StructuredRel):
-    duration = IntegerProperty(required=True)
+    durations = JSONProperty()
 
 class User(StructuredNode):
     mac = StringProperty(unique_index=True, required=True)
